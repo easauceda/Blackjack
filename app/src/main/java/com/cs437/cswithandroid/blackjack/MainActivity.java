@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -86,6 +88,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void animateDraw(String player) {
+        int y;
+        ImageView drawnCard;
+
+        if (player.equals("player")){
+            drawnCard = (ImageView) findViewById(R.id.playerCard);
+            y = drawnCard.getHeight();
+        } else {
+            drawnCard = (ImageView) findViewById(R.id.dealerCard);
+            y = drawnCard.getHeight() * -1;
+        }
+
+        Animation anim = new TranslateAnimation(0,0,y, 0);
+        anim.setDuration(700);
+        drawnCard.startAnimation(anim);
+    }
+
     private void checkWinner() {
         String winner;
 
@@ -99,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             winner = "Dealer Wins!";
         }
 
-        Toast winnerMsg = Toast.makeText(this, winner, Toast.LENGTH_SHORT);
+        Toast winnerMsg = Toast.makeText(this, winner, Toast.LENGTH_LONG);
         winnerMsg.show();
     }
 
@@ -113,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playerDraw() {
+        animateDraw("player");
         Card card = deck.draw();
         playerScore += card.getValue();
         ImageView cardView = (ImageView) findViewById(R.id.playerCard);
@@ -130,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dealerDraw() {
+        animateDraw("dealer");
         Card card = deck.draw();
         dealerScore += card.getValue();
         ImageView cardView = (ImageView) findViewById(R.id.dealerCard);
