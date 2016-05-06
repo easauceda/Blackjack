@@ -76,6 +76,13 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="Start"
+                android:id="@+id/start"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="Hold."
                 android:id="@+id/hold"
                 android:layout_weight="1" />
