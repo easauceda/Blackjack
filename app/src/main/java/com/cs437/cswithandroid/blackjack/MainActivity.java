@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     int dealerScore;
     Button hit = null;
     Button hold = null;
+    Deck deck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void startGame(){
+
+        deck = new Deck(this);
+        deck.shuffle();
 
         hit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
         updateScore("dealer", dealerScore);
         updateScore("player", playerScore);
 
+        playerDraw();
+        dealerDraw();
+        if (dealerScore > 21 || playerScore > 21){
+            checkWinner();
+        }
     }
 
     private void checkWinner() {
@@ -98,22 +107,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playerDraw() {
-        //for debugging
-        Random test = new Random();
-        int random = test.nextInt(13) + 1;
-        playerScore += random;
+        Card card = deck.draw();
+        playerScore += card.getValue();
+        ImageView cardView = (ImageView) findViewById(R.id.playerCard);
+        cardView.setImageResource(card.getDrawableId());
         updateScore("player", playerScore);
-        ImageView card = (ImageView) findViewById(R.id.playerCard);
-        card.setImageResource(R.drawable.card1);
+        //for debugging
+//        Random test = new Random();
+//        int random = test.nextInt(13) + 1;
+//        playerScore += random;
+//        updateScore("player", playerScore);
+//        ImageView card = (ImageView) findViewById(R.id.playerCard);
+//        card.setImageResource(R.drawable.card1);
+
+
     }
 
     private void dealerDraw() {
-        Random test = new Random();
-        int random = test.nextInt(13) + 1;
-        dealerScore += random;
+        Card card = deck.draw();
+        dealerScore += card.getValue();
+        ImageView cardView = (ImageView) findViewById(R.id.dealerCard);
+        cardView.setImageResource(card.getDrawableId());
         updateScore("dealer", dealerScore);
-        ImageView card = (ImageView) findViewById(R.id.dealerCard);
-        card.setImageResource(R.drawable.card6);
+//        Random test = new Random();
+//        int random = test.nextInt(13) + 1;
+//        dealerScore += random;
+//        updateScore("dealer", dealerScore);
+//        ImageView card = (ImageView) findViewById(R.id.dealerCard);
+//        card.setImageResource(R.drawable.card6);
     }
 
     private void updateScore(String turn, int i) {
