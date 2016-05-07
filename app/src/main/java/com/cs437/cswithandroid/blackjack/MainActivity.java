@@ -19,6 +19,11 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
     int playerScore;
     int dealerScore;
+    int playerScoreAceLow;
+    int playerScoreAceHigh;
+    int dealerScoreAceLow;
+    int dealerScoreAceHigh;
+
     Button hit = null;
     Button hold = null;
     Deck deck;
@@ -77,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
         playerScore = 0;
         dealerScore = 0;
+        playerScoreAceLow = 0;
+        playerScoreAceHigh = 0;
+        dealerScoreAceLow = 0;
+        dealerScoreAceHigh = 0;
 
         updateScore("dealer", dealerScore);
         updateScore("player", playerScore);
@@ -134,6 +143,16 @@ public class MainActivity extends AppCompatActivity {
     private void playerDraw() {
         animateDraw("player");
         Card card = deck.draw();
+
+        if(card.isAce()) {
+            playerScoreAceHigh += 11;
+            playerScoreAceLow += card.getValue();
+        }
+        else{
+            playerScoreAceHigh += card.getValue();
+            playerScoreAceLow += card.getValue();
+        }
+
         playerScore += card.getValue();
         ImageView cardView = (ImageView) findViewById(R.id.playerCard);
         cardView.setImageResource(card.getDrawableId());
@@ -152,6 +171,16 @@ public class MainActivity extends AppCompatActivity {
     private void dealerDraw() {
         animateDraw("dealer");
         Card card = deck.draw();
+
+        if(card.isAce()) {
+            dealerScoreAceHigh += 11;
+            dealerScoreAceLow += card.getValue();
+        }
+        else{
+            dealerScoreAceHigh += card.getValue();
+            dealerScoreAceLow += card.getValue();
+        }
+
         dealerScore += card.getValue();
         ImageView cardView = (ImageView) findViewById(R.id.dealerCard);
         cardView.setImageResource(card.getDrawableId());

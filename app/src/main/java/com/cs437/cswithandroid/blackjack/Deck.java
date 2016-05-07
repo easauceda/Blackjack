@@ -1,8 +1,6 @@
 package com.cs437.cswithandroid.blackjack;
 
 import android.content.Context;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -21,14 +19,24 @@ public class Deck {
             String cardIdName = "card" + Integer.toString(i);
             int resourceId = context.getResources().getIdentifier(cardIdName, "drawable", context.getPackageName());
 
+            // Makes sure J, Q, and K values are 10
             int cardValue = j;
             if(j > 10){
                 cardValue = 10;
             }
 
-            Card card = new Card(cardValue, resourceId);
+            // makes new card, if j = 1 then it is an Ace
+            Card card;
+            if(j == 1){
+                card = new Card(cardValue, resourceId, true);
+            }
+            else{
+                card = new Card(cardValue, resourceId, false);
+            }
+
             deckOfCards.add(card);
 
+            // Reset the value of j for the card object values
             if((i % 13) == 0) {
                 j = 0;
             }

@@ -7,15 +7,17 @@ public class Card {
 
     private int value;
     private int drawableId;
+    private boolean isAce;
 
-    public Card(int value, int drawableId){
+    public Card(int value, int drawableId, boolean isAce){
         this.value = value;
         this.drawableId = drawableId;
+        this.isAce = isAce;
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
+    public void setIsAce(boolean isAce) { this.isAce = isAce; }
+
+    public void setValue(int value) { this.value = value; }
 
     public void setDrawableId(int drawableId) {
         this.drawableId = drawableId;
@@ -29,5 +31,9 @@ public class Card {
     public int getValue() {
 
         return value;
+    }
+
+    public boolean isAce() {
+        return isAce;
     }
 }
