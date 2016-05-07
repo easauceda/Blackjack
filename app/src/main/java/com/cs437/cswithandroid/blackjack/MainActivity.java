@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     public void startGame(){
 
         deck = new Deck(this);
@@ -91,13 +93,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (player.equals("player")){
             drawnCard = (ImageView) findViewById(R.id.playerCard);
-            y = drawnCard.getHeight();
         } else {
             drawnCard = (ImageView) findViewById(R.id.dealerCard);
-            y = drawnCard.getHeight() * -1;
         }
-
-        Animation anim = new TranslateAnimation(0,0,y, 0);
+        y = drawnCard.getHeight();
+        Animation anim = new TranslateAnimation(y,0,0, 0);
         anim.setDuration(700);
         drawnCard.startAnimation(anim);
     }

@@ -33,11 +33,23 @@
                 android:layout_gravity="right"
                 android:textColor="#ffffff" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/dealerCard"
-                android:layout_gravity="center_horizontal" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageView3"
+                    android:src="@drawable/back" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/dealerCard"
+                    android:layout_marginLeft="100dp" />
+            </FrameLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -54,10 +66,24 @@
                 android:id="@+id/playerScore"
                 android:textColor="#ffffff" />
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/playerCard" />
+                android:id="@+id/playerCards">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageView2"
+                    android:src="@drawable/back" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/playerCard"
+                    android:layout_marginLeft="100dp" />
+            </FrameLayout>
+
         </LinearLayout>
 
         <LinearLayout
