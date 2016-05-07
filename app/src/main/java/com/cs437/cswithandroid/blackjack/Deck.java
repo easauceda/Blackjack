@@ -21,10 +21,13 @@ public class Deck {
             String cardIdName = "card" + Integer.toString(i);
             int resourceId = context.getResources().getIdentifier(cardIdName, "drawable", context.getPackageName());
 
-            Card card = new Card(j, resourceId);
-            deckOfCards.add(card);
+            int cardValue = j;
+            if(j > 10){
+                cardValue = 10;
+            }
 
-            System.out.println("j Index: " + j);
+            Card card = new Card(cardValue, resourceId);
+            deckOfCards.add(card);
 
             if((i % 13) == 0) {
                 j = 0;
