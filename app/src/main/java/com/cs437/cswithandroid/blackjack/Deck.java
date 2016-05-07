@@ -24,9 +24,12 @@ public class Deck {
             Card card = new Card(j, resourceId);
             deckOfCards.add(card);
 
+            System.out.println("j Index: " + j);
+
             if((i % 13) == 0) {
-                j = 1;
+                j = 0;
             }
+
         }
 
 
