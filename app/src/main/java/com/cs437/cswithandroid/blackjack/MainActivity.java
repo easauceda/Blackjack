@@ -1,7 +1,7 @@
 package com.cs437.cswithandroid.blackjack;
 
+import android.app.Activity;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -14,16 +14,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.Random;
-
-public class MainActivity extends AppCompatActivity {
-    int playerScore;
-    int dealerScore;
+public class MainActivity extends Activity {
+    int playerScore, dealerScore;
+    int playerTranslate = 0;
+    int dealerTranslate = 0;
     Button hit = null;
     Button hold = null;
     Deck deck;
+    FrameLayout playerFrame;
+    FrameLayout dealerFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +53,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGame(){
 
+        playerTranslate = 0;
+        dealerTranslate = 0;
+        playerScore = 0;
+        dealerScore = 0;
+        playerFrame = (FrameLayout) findViewById(R.id.playerCards);
+        dealerFrame = (FrameLayout) findViewById(R.id.dealerCards);
         deck = new Deck(this);
+
         deck.shuffle();
+
+        if (playerFrame.getChildCount() > 2){
+            playerFrame.removeViews(1, playerFrame.getChildCount() - 1);
+            dealerFrame.removeViews(1, dealerFrame.getChildCount() - 1);
+        }
 
         hit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,36 +81,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 hit.setEnabled(false);
                 hold.setEnabled(false);
-                dealerDraw();
+                dealersTurn();
             }
         });
 
-        playerScore = 0;
-        dealerScore = 0;
 
-        updateScore("dealer", dealerScore);
-        updateScore("player", playerScore);
-
+        dealerDraw();
         playerDraw();
-        initDealer();
-        if (dealerScore > 21 || playerScore > 21){
-            checkWinner();
-        }
-    }
-
-    private void animateDraw(String player) {
-        int y;
-        ImageView drawnCard;
-
-        if (player.equals("player")){
-            drawnCard = (ImageView) findViewById(R.id.playerCard);
-        } else {
-            drawnCard = (ImageView) findViewById(R.id.dealerCard);
-        }
-        y = drawnCard.getHeight();
-        Animation anim = new TranslateAnimation(y,0,0, 0);
-        anim.setDuration(700);
-        drawnCard.startAnimation(anim);
+        playerDraw();
     }
 
     private void checkWinner() {
@@ -129,63 +118,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playerDraw() {
-        animateDraw("player");
         Card card = deck.draw();
+        ImageView cardImage = new ImageView(this);
+
+        cardImage.setImageResource(card.getDrawableId());
+        cardImage.setTranslationX(playerTranslate);
+        playerTranslate += 75;
+
+        playerFrame.addView(cardImage);
+
+        Animation anim = new TranslateAnimation(playerFrame.getWidth(),0,0, 0);
+        anim.setDuration(700);
+        cardImage.startAnimation(anim);
+
         playerScore += card.getValue();
-        ImageView cardView = (ImageView) findViewById(R.id.playerCard);
-        cardView.setImageResource(card.getDrawableId());
-        updateScore("player", playerScore);
-        //for debugging
-//        Random test = new Random();
-//        int random = test.nextInt(13) + 1;
-//        playerScore += random;
-//        updateScore("player", playerScore);
-//        ImageView card = (ImageView) findViewById(R.id.playerCard);
-//        card.setImageResource(R.drawable.card1);
+        updateScore("Player", playerScore);
+        checkStatus();
 
 
     }
 
-    private void dealerDraw() {
+    private void dealersTurn() {
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (dealerScore < 20){
-                    animateDraw("dealer");
-                    Card card = deck.draw();
-                    dealerScore += card.getValue();
-                    ImageView cardView = (ImageView) findViewById(R.id.dealerCard);
-                    cardView.setImageResource(card.getDrawableId());
-                    updateScore("dealer", dealerScore);
-                    checkStatus();
+                if (dealerScore < 18){
                     dealerDraw();
+                    dealersTurn();
                 } else {
                     checkWinner();
                 }
             }
-        }, 1000);
-//        Random test = new Random();
-//        int random = test.nextInt(13) + 1;
-//        dealerScore += random;
-//        updateScore("dealer", dealerScore);
-//        ImageView card = (ImageView) findViewById(R.id.dealerCard);
-//        card.setImageResource(R.drawable.card6);
+        }, 500);
     }
 
-    private void initDealer(){
-        animateDraw("dealer");
+    private void dealerDraw(){
+        ImageView cardImage = new ImageView(this);
         Card card = deck.draw();
+        cardImage.setImageResource(card.getDrawableId());
+        cardImage.setTranslationX(dealerTranslate);
+
+        dealerTranslate += 75;
+
+        dealerFrame.addView(cardImage);
+
+        Animation anim = new TranslateAnimation(dealerFrame.getWidth(), 0,0,0);
+        anim.setDuration(700);
+        cardImage.startAnimation(anim);
+
         dealerScore += card.getValue();
-        ImageView cardView = (ImageView) findViewById(R.id.dealerCard);
-        cardView.setImageResource(card.getDrawableId());
-        updateScore("dealer", dealerScore);
+        updateScore("Dealer", dealerScore);
+        checkStatus();
     }
 
     private void updateScore(String turn, int i) {
         TextView score;
 
-        if (turn.equals("player")){
+        if (turn.equals("Player")){
             score = (TextView) findViewById(R.id.playerScore);
         } else {
             score = (TextView) findViewById(R.id.dealerScore);
